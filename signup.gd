@@ -17,7 +17,15 @@ func _on_http_request_request_completed(_result: int, response_code: int, _heade
 	message_label.text = data
 
 
+func is_valid_email(email: String) -> bool:
+	return email.match("*@*.*")
+
+
 func _on_button_pressed() -> void:
+	if not is_valid_email(email.text):
+		message_label.text = 'please enter valid email.'
+		return
+	
 	var body = JSON.new().stringify(
 		{
 			'username': username.text,
@@ -35,5 +43,6 @@ func _on_login_button_pressed() -> void:
 	var form_data = "username={username}&password={password}".format({
 		"username": username.text,
 		"password": pwd.text})
-	http_request.request("http://127.0.0.1:8080/auth/token/", headers, HTTPClient.METHOD_POST, form_data)
+	http_request.request("http://127.0.0.1:8080/auth/token/", headers, 
+		HTTPClient.METHOD_POST, form_data)
 
