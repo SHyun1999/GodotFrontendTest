@@ -1,12 +1,14 @@
 extends Control
 
 
-@onready var username: LineEdit = $VBoxContainer/HBoxContainer/Username
-@onready var pwd: LineEdit = $VBoxContainer/HBoxContainer2/Pwd
-@onready var email: LineEdit = $VBoxContainer/HBoxContainer3/Email
+@onready var username: LineEdit = $VBoxContainer/Username
+@onready var pwd: LineEdit = $VBoxContainer/Pwd
+@onready var email: LineEdit = $VBoxContainer/Email
 @onready var message_label: Label = $VBoxContainer/MessageLabel
 @onready var signup_request: HTTPRequest = $SignupRequest
 @onready var login_request: HTTPRequest = $LoginRequest
+
+@export var user_scene: PackedScene
 
 
 func is_valid_email(s: String) -> bool:
@@ -19,8 +21,9 @@ func clear_fields() -> void:
 	pwd.clear()
 
 
-func _on_button_pressed() -> void:
+func _on_signup_button_pressed() -> void:
 	if not is_valid_email(email.text):
+		message_label.set("theme_override_colors/font_color", Color.DARK_RED)
 		message_label.text = 'please enter valid email.'
 		return
 	
@@ -31,7 +34,6 @@ func _on_button_pressed() -> void:
 			'password': pwd.text
 		}
 	)
-
 	
 	signup_request.request('http://127.0.0.1:8080/auth/',
 		[], 
@@ -40,11 +42,12 @@ func _on_button_pressed() -> void:
 
 func _on_login_button_pressed() -> void:
 	if username.text.is_empty() or pwd.text.is_empty():
+		message_label.set("theme_override_colors/font_color", Color.DARK_RED)
 		message_label.text = 'please enter valid username/password.'
 		return
 	
-	var headers = ["Content-Type: application/x-www-form-urlencoded", "Accept: application/json"]
-	var form_data = "username={username}&password={password}"\
+	var headers: Array[String] = ["Content-Type: application/x-www-form-urlencoded", "Accept: application/json"]
+	var form_data: String = "username={username}&password={password}"\
 		.format({
 			"username": username.text,
 			"password": pwd.text})
@@ -58,6 +61,7 @@ func _on_signup_http_request_completed(_result: int, response_code: int, _header
 	clear_fields()
 	
 	if response_code == 200:
+		message_label.set("theme_override_colors/font_color", Color.WEB_GREEN)
 		message_label.text = 'account created'
 
 
@@ -65,9 +69,9 @@ func _on_login_http_request_completed(_result: int, response_code: int, _headers
 	clear_fields()
 	
 	if response_code == 200:
-		var data: String = body.get_string_from_utf8()
-		var thingy = JSON.parse_string(data)
-		message_label.text = thingy['access_token'] + '\n you are logged in!'
+		var json = JSON.parse_string(body.get_string_from_utf8())
+		UserData.TOKEN = json['access_token']
+		get_tree().change_scene_to_packed(user_scene)
 	else:
 		message_label.text = 'access denied!'
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://nsqth8rhhj6e"]
+[gd_scene load_steps=3 format=3 uid="uid://nsqth8rhhj6e"]
 
 [ext_resource type="Script" path="res://signup.gd" id="1_0gnc0"]
+[ext_resource type="PackedScene" uid="uid://cfydp0xeq6sdl" path="res://user.tscn" id="2_3887k"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -10,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0gnc0")
+user_scene = ExtResource("2_3887k")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -18,44 +20,30 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -100.0
+offset_top = -99.0
+offset_right = 100.0
+offset_bottom = 99.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Username" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+placeholder_text = "Username"
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Pwd" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "username:"
-
-[node name="Username" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "password:"
-
-[node name="Pwd" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
-layout_mode = 2
+placeholder_text = "Password"
 secret = true
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-text = "email:"
-
-[node name="Email" type="LineEdit" parent="VBoxContainer/HBoxContainer3"]
+[node name="Email" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
+placeholder_text = "Email"
 
 [node name="MessageLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
@@ -73,7 +61,7 @@ text = "Log in"
 
 [node name="LoginRequest" type="HTTPRequest" parent="."]
 
-[connection signal="pressed" from="VBoxContainer/SignUpButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SignUpButton" to="." method="_on_signup_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoginButton" to="." method="_on_login_button_pressed"]
 [connection signal="request_completed" from="SignupRequest" to="." method="_on_signup_http_request_completed"]
 [connection signal="request_completed" from="LoginRequest" to="." method="_on_login_http_request_completed"]

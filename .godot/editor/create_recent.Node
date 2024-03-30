@@ -1,6 +1,7 @@
 HTTPRequest
 Button
+VBoxContainer
+RichTextLabel
 Label
 LineEdit
 HBoxContainer
-VBoxContainer
