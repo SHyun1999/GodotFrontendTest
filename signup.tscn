@@ -55,6 +55,7 @@ text = "email:"
 
 [node name="Email" type="LineEdit" parent="VBoxContainer/HBoxContainer3"]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="MessageLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
@@ -66,10 +67,7 @@ text = "Sign up
 
 [node name="LoginButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Login"
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+text = "Log in"
 
 [connection signal="pressed" from="VBoxContainer/SignUpButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoginButton" to="." method="_on_login_button_pressed"]
-[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
