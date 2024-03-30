@@ -69,5 +69,11 @@ text = "Sign up
 layout_mode = 2
 text = "Log in"
 
+[node name="SignupRequest" type="HTTPRequest" parent="."]
+
+[node name="LoginRequest" type="HTTPRequest" parent="."]
+
 [connection signal="pressed" from="VBoxContainer/SignUpButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoginButton" to="." method="_on_login_button_pressed"]
+[connection signal="request_completed" from="SignupRequest" to="." method="_on_signup_http_request_completed"]
+[connection signal="request_completed" from="LoginRequest" to="." method="_on_login_http_request_completed"]

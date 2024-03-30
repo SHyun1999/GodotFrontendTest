@@ -5,10 +5,18 @@ extends Control
 @onready var pwd: LineEdit = $VBoxContainer/HBoxContainer2/Pwd
 @onready var email: LineEdit = $VBoxContainer/HBoxContainer3/Email
 @onready var message_label: Label = $VBoxContainer/MessageLabel
+@onready var signup_request: HTTPRequest = $SignupRequest
+@onready var login_request: HTTPRequest = $LoginRequest
 
 
 func is_valid_email(s: String) -> bool:
 	return s.match("*@*.*")
+
+
+func clear_fields() -> void:
+	username.clear()
+	email.clear()
+	pwd.clear()
 
 
 func _on_button_pressed() -> void:
@@ -23,13 +31,9 @@ func _on_button_pressed() -> void:
 			'password': pwd.text
 		}
 	)
-	
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-	http_request.request_completed.connect(self._on_signup_http_request_completed)
 
 	
-	http_request.request('http://127.0.0.1:8080/auth/',
+	signup_request.request('http://127.0.0.1:8080/auth/',
 		[], 
 		HTTPClient.METHOD_POST, body)
 
@@ -44,34 +48,26 @@ func _on_login_button_pressed() -> void:
 		.format({
 			"username": username.text,
 			"password": pwd.text})
-
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-	http_request.request_completed.connect(self._on_login_http_request_completed)
 	
-	http_request.request("http://127.0.0.1:8080/auth/token", 
+	login_request.request("http://127.0.0.1:8080/auth/token", 
 		headers, 
 		HTTPClient.METHOD_POST, form_data)
 
 
 func _on_signup_http_request_completed(_result: int, response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
-	username.text = ''
-	email.text = ''
-	pwd.text = ''
+	clear_fields()
 	
 	if response_code == 200:
 		message_label.text = 'account created'
 
 
 func _on_login_http_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
-	username.text = ''
-	email.text = ''
-	pwd.text = ''
+	clear_fields()
 	
 	if response_code == 200:
 		var data: String = body.get_string_from_utf8()
 		var thingy = JSON.parse_string(data)
-		message_label.text = thingy['access_token']
+		message_label.text = thingy['access_token'] + '\n you are logged in!'
 	else:
 		message_label.text = 'access denied!'
 
