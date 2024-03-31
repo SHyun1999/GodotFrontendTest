@@ -35,7 +35,7 @@ func _on_signup_button_pressed() -> void:
 		}
 	)
 	
-	signup_request.request('http://127.0.0.1:8080/auth/',
+	signup_request.request(UserData.SERVER_URL + '/auth/',
 		[], 
 		HTTPClient.METHOD_POST, body)
 
@@ -52,7 +52,7 @@ func _on_login_button_pressed() -> void:
 			"username": username.text,
 			"password": pwd.text})
 	
-	login_request.request("http://127.0.0.1:8080/auth/token", 
+	login_request.request(UserData.SERVER_URL + "/auth/token", 
 		headers, 
 		HTTPClient.METHOD_POST, form_data)
 

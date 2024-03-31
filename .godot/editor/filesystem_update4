@@ -1,5 +1,5 @@
 res://signup.tscn
-res://signup.gd
+res://userdata.gd
 res://user.tscn
-res://data.gd
 res://user.gd
+res://signup.gd
